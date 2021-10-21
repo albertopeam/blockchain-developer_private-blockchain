@@ -17,5 +17,8 @@
     "hex2ascii": "0.0.3",
     "morgan": "^1.9.1",
     "tiny-secp256k1": "^2.0.1"
+  },
+  "devDependencies": {
+    "jest": "^27.3.1"
   }
 }
