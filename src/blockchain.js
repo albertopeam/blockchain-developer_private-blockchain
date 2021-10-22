@@ -63,8 +63,20 @@ class Blockchain {
      */
     _addBlock(block) {
         let self = this;
-        return new Promise(async (resolve, reject) => {
-           
+        return new Promise(async (resolve, reject) => {                                    
+            const isNotEmptyChain = self.height > 0
+            if (isNotEmptyChain) {                      // if not genesis
+                const previousBlockHeight = self.height - 1;
+                block.previousBlockHash = self.chain[previousBlockHeight].hash  // link current block with previous block
+            } else {
+                self.height = 0;                                        // if chain is empty set height to zero
+            }
+            block.time = new Date().getTime() / 1000    // UTC time
+            block.height = self.height                  // height
+            block.hash = SHA256(JSON.stringify(block)).toString()
+            self.chain.push(block)                      // add
+            self.height += 1;                           // add height
+            resolve(block)
         });
     }
 
