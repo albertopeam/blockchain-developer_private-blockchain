@@ -9,7 +9,7 @@
  */
 
 const SHA256 = require('crypto-js/sha256');
-const BlockClass = require('./block.js');
+const Block = require('./block.js');
 const bitcoinMessage = require('bitcoinjs-message');
 
 class Blockchain {
@@ -34,8 +34,8 @@ class Blockchain {
      * Passing as a data `{data: 'Genesis Block'}`
      */
     async initializeChain() {
-        if( this.height === -1){
-            let block = new BlockClass.Block({data: 'Genesis Block'});
+        if(this.height === -1){
+            let block = new Block({data: 'Genesis Block'});
             await this._addBlock(block);
         }
     }
@@ -166,4 +166,4 @@ class Blockchain {
 
 }
 
-module.exports.Blockchain = Blockchain;   
+module.exports = Blockchain;   

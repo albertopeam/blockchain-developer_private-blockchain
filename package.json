@@ -4,7 +4,7 @@
   "description": "This project creates a Blockchain application to store data into the blocks",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest ./test"
   },
   "author": "Udacity - jose.morales@udacity.com",
   "license": "ISC",
@@ -20,5 +20,10 @@
   },
   "devDependencies": {
     "jest": "^27.3.1"
+  },
+  "jest": {
+    "verbose": true,    
+    "moduleFileExtensions": ["js"],
+    "moduleDirectories": ["node_modules", "src"]
   }
 }

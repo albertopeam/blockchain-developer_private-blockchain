@@ -12,7 +12,7 @@ const bodyParser = require("body-parser");
 /**
  * Require the Blockchain class. This allow us to have only one instance of the class.
  */
-const BlockChain = require('./src/blockchain.js');
+const Blockchain = require('./src/blockchain.js');
 
 class ApplicationServer {
 
@@ -20,7 +20,7 @@ class ApplicationServer {
 		//Express application object
 		this.app = express();
 		//Blockchain class object
-		this.blockchain = new BlockChain.Blockchain();
+		this.blockchain = new Blockchain();
 		//Method that initialized the express framework.
 		this.initExpress();
 		//Method that initialized middleware modules
