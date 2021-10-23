@@ -10,7 +10,7 @@
  */
 
 const SHA256 = require('crypto-js/sha256');
-const hex2ascii = require('hex2ascii');
+const hex2utf8 = require('./hex2utf8.js');
 
 class Block {
 
@@ -37,9 +37,9 @@ class Block {
             // Recalculate the hash of the Block
             const recalculatedHash = SHA256(JSON.stringify(self)).toString();
             // Comparing if the hashes changed
-            const hasChangedBody = currrentHash == recalculatedHash;        
+            const hashesMatch = currrentHash == recalculatedHash;        
             // Returning the Block is valid or not valid
-            if (hasChangedBody) {
+            if (hashesMatch) {
                 self.hash = currrentHash
                 resolve(true);
             } else {
@@ -60,10 +60,10 @@ class Block {
                 // Getting the encoded data saved in the Block
                 const hex = self.body;
                 // Decoding the data to retrieve the JSON representation of the object
-                const ascii = hex2ascii(hex);
+                const ascii = hex2utf8(hex);
                 // Parse the data to an object to be retrieve.
                 const data = JSON.parse(ascii);
-                resolve(data)
+                resolve(data);
             } else {
                 reject(Error("Genesis block hasn't associated data"));
             }
