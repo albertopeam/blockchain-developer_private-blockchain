@@ -1,3 +1,8 @@
+/*
+Snippet taken from
+https://gist.github.com/valentinkostadinov/5875467
+*/
+
 function fromHex(h) {
     var s = ''
     for (var i = 0; i < h.length; i+=2) {
