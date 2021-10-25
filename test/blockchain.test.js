@@ -15,20 +15,21 @@ test('when initialize blockchain then genesis is added', async () => {
 })
 
 test('when adding a block to a non empty blockchain then check new height and new block as added', async () => {
-    const testStartDate = new Date().getTime() / 1000;
+    const testStartDate = new Date().getTime().toString().slice(0,-3);
     const newData = {data: "some data"};
     const newBlock = new Block(newData);
     const blockchain = await new Blockchain();
 
     const result = await blockchain._addBlock(newBlock);
 
-    const testEndDate = new Date().getTime() / 1000;
+    const testEndDate = new Date().getTime().toString().slice(0,-3);
     const addedBlock = blockchain.chain[1];
     expect(blockchain.height).toBe(2);
     expect(addedBlock.getBData()).resolves.toStrictEqual(newData);
     expect(addedBlock.height).toBe(1);
-    expect(addedBlock.time).toBeGreaterThanOrEqual(testStartDate);
-    expect(addedBlock.time).toBeLessThanOrEqual(testEndDate);
+    const date = parseInt(addedBlock.time);
+    expect(date).toBeGreaterThanOrEqual(parseInt(testStartDate));
+    expect(date).toBeLessThanOrEqual(parseInt(testEndDate));
     expect(addedBlock.previousBlockHash).toStrictEqual(blockchain.chain[0].hash);
 })
 
@@ -98,7 +99,7 @@ describe(`get block by hash`, () => {
         const hash = "0a"
         const blockchain = await new Blockchain();
 
-        await expect(blockchain.getBlockByHash(hash)).rejects.toBeNull();
+        await expect(blockchain.getBlockByHash(hash)).resolves.toBeNull();
     })
 
     test(`when requesting a valid block hash then return block`, async () => {
