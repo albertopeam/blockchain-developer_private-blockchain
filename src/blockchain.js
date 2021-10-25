@@ -50,12 +50,15 @@ class Blockchain {
     }
 
     /**
-     * _addBlock(block) will store a block in the chain
+     * _addBlock(block) will store a block in the chain. 
+     * After adding the block, the chain will be validated, if 
+     * it is corrupted _addBlock will reject with a list of 
+     * errors
      * @param {*} block 
      */
     _addBlock(block) {
         let self = this;
-        return new Promise(async (resolve) => {                                    
+        return new Promise(async (resolve, reject) => {                                    
             const isNotEmptyChain = self.height > 0
             if (isNotEmptyChain) {                      // if not genesis
                 const previousBlockHeight = self.height - 1;
@@ -68,7 +71,12 @@ class Blockchain {
             block.hash = SHA256(JSON.stringify(block)).toString()
             self.chain.push(block)                                      // add
             self.height += 1;                                           // add height
-            resolve(block)
+            const errors = await self.validateChain();                  // check if chain is valid
+            if (errors.length > 0) {
+                reject(new Error(errors.toString()));
+            } else {
+                resolve(block);
+            }
         });
     }
 

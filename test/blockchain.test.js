@@ -14,23 +14,35 @@ test('when initialize blockchain then genesis is added', async () => {
     expect(genesisBlock.previousBlockHash).toBeNull();
 })
 
-test('when adding a block to a non empty blockchain then check new height and new block as added', async () => {
-    const testStartDate = new Date().getTime().toString().slice(0,-3);
-    const newData = {data: "some data"};
-    const newBlock = new Block(newData);
-    const blockchain = await new Blockchain();
 
-    const result = await blockchain._addBlock(newBlock);
+describe(`adding block`, () => {   
+    test('when adding a block to a non empty blockchain then check new height and new block as added', async () => {
+        const testStartDate = new Date().getTime().toString().slice(0,-3);
+        const newData = {data: "some data"};
+        const newBlock = new Block(newData);
+        const blockchain = await new Blockchain();
 
-    const testEndDate = new Date().getTime().toString().slice(0,-3);
-    const addedBlock = blockchain.chain[1];
-    expect(blockchain.height).toBe(2);
-    expect(addedBlock.getBData()).resolves.toStrictEqual(newData);
-    expect(addedBlock.height).toBe(1);
-    const date = parseInt(addedBlock.time);
-    expect(date).toBeGreaterThanOrEqual(parseInt(testStartDate));
-    expect(date).toBeLessThanOrEqual(parseInt(testEndDate));
-    expect(addedBlock.previousBlockHash).toStrictEqual(blockchain.chain[0].hash);
+        const result = await blockchain._addBlock(newBlock);
+
+        const testEndDate = new Date().getTime().toString().slice(0,-3);
+        const addedBlock = blockchain.chain[1];
+        expect(blockchain.height).toBe(2);
+        expect(addedBlock.getBData()).resolves.toStrictEqual(newData);
+        expect(addedBlock.height).toBe(1);
+        const date = parseInt(addedBlock.time);
+        expect(date).toBeGreaterThanOrEqual(parseInt(testStartDate));
+        expect(date).toBeLessThanOrEqual(parseInt(testEndDate));
+        expect(addedBlock.previousBlockHash).toStrictEqual(blockchain.chain[0].hash);
+    })
+
+    test('when adding a block after tampering the blockchain then return errors', async () => {
+        const newBlock = new Block("some data");
+        const blockchain = await new Blockchain();
+        blockchain.chain[0].hash = "tampered-hash";
+
+        const expected = "Invalid block hash at index 0,Invalid previous block hash at index 1";
+        await expect(blockchain._addBlock(newBlock)).rejects.toThrow(expected);  
+    })
 })
 
 test('when requesting owner message verification then return wallet-adddress:Date:starRegistry pattern', async () => {
